@@ -4,10 +4,8 @@ pipeline {
         stages {
         
             stage('checkout_nodejs_app') {
-            when {expression { params.project_name == 'nodejs' }}
                 steps {
-                    git branch:"${BRANCH}", url: 'https://github.com/devopsabi/demo_app.git', credentialsId:'git_hub_id'
-                    sh "ls -lat"
+                    git branch:"master", url: '', credentialsId:'git_hub_id'
                 }
     
             }
