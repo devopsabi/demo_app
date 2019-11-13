@@ -17,7 +17,7 @@ pipeline {
                 steps {
                     script{
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
-                            docker.build('devopsabi/demo_app:'+currentBuild.number).push()
+                            docker.build('https://hub.docker.com/repository/docker/devopsabi/demo_app:'+currentBuild.number).push()
                            }
                     }
                 }
