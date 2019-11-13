@@ -11,5 +11,18 @@ pipeline {
                 }
     
             }
+
+    
+
+
+         stage('build docker image nodejs_app'){
+                steps {
+                    script{
+                        withDockerRegistry(url:'https://hub.docker.com',credentialsId:'docker_hub_id'){
+                            docker.build('https://hub.docker.com/repository/docker/devopsabi/demo_app:'+currentBuild.number).push()
+                           }
+                    }
+                }
+            }
     }
 }
