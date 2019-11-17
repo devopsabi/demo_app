@@ -16,6 +16,7 @@ pipeline {
          stage('build docker image nodejs_app'){
                 steps {
                     script{
+			println "${params.build_deploy}"
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
                             docker.build('devopsabi/demo_app:'+currentBuild.number).push()
                            }
