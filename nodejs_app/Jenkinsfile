@@ -12,7 +12,7 @@ pipeline {
 	    stage('Test Run') {
             	steps {
                 	retry(3) {
-                  	  sh 'pwd'
+                  	  sh './run.sh'
                		 }
 
                 	timeout(time: 3, unit: 'MINUTES') {
