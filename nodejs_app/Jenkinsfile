@@ -12,11 +12,11 @@ pipeline {
 	    stage('Test Run') {
             	steps {
                 	retry(3) {
-                  	  sh './run.sh'
+                  	  sh 'ls'
                		 }
 
                 	timeout(time: 3, unit: 'MINUTES') {
-                    		sh './health-check.sh'
+                    		sh 'ls -lrth'
                		 }
             	}
 	    }
