@@ -9,17 +9,6 @@ pipeline {
                 }
     
             }
-	    stage('Test Run') {
-            	steps {
-                	retry(3) {
-                  	  sh 'ssh \-q jenkins@192.168.33.11 "docker node ls"'
-               		 }
-
-                	timeout(time: 3, unit: 'MINUTES') {
-                    		sh './health-check.sh'
-               		 }
-            	}
-	    }
 		
          stage('build docker image nodejs_app'){
                 steps {
