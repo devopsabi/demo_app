@@ -1,25 +1,37 @@
 pipeline {
+
         agent any
-        
+
         stages {
-        
+
             stage('checkout_nodejs_app') {
                 steps {
+                    script{
+                        String seedJobName = 'login_github'
+                    }
                     git branch:"master", url: '', credentialsId:'git_hub_id'
                 }
-    
+
             }
-		
+            
+
+            def remote = [:]
+            remote.name = 'test'
+            remote.host = '192.168.33.11'
+            remote.user = 'jenkins'
+            remote.allowAnyHosts = true
+            stage('Remote SSH') {
+              sshCommand remote: remote, command: "ls -lrt"
+            }
+
          stage('build docker image nodejs_app'){
                 steps {
                     script{
-			
+                        println "${params.build_deploy}"
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
-                            /*docker.build('devopsabi/demo_app:'+currentBuild.number).push()*/
-			    println "${env}"
+                            /* docker.build('devopsabi/demo_app:'+currentBuild.number).push() */
                            }
                     }
                 }
             }
     }
-}
