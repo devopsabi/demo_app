@@ -1,17 +1,36 @@
 pipeline {
-
-        agent node
-
-
-            def remote = [:]
-            remote.name = 'test'
-            remote.host = '192.168.33.11'
-            remote.user = 'jenkins'
-            remote.allowAnyHosts = true
-            stage('Remote SSH') {
-              sshCommand remote: remote, command: "ls -lrt"
-            }
-
-
+        agent any
+        
+        stages {
+        
+            stage('checkout_nodejs_app') {
+                steps {
+                    git branch:"master", url: '', credentialsId:'git_hub_id'
+                }
     
+            }
+	    stage('Test Run') {
+            	steps {
+                	retry(3) {
+                  	  sh 'ssh \-q jenkins@192.168.33.11 "docker node ls"'
+               		 }
+
+                	timeout(time: 3, unit: 'MINUTES') {
+                    		sh './health-check.sh'
+               		 }
+            	}
+	    }
+		
+         stage('build docker image nodejs_app'){
+                steps {
+                    script{
+			
+                        withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
+                            /*docker.build('devopsabi/demo_app:'+currentBuild.number).push()*/
+			    println "${env}"
+                           }
+                    }
+                }
+            }
+    }
 }
