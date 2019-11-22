@@ -9,7 +9,7 @@ pipeline {
                 }
 
             }
-            
+            boolean difference = true
             stage('Verify if there is a change in the version'){
                 steps{
                     script{
@@ -25,19 +25,39 @@ pipeline {
             
             
 
-
+         boolean testPassed = true
          stage('build docker image nodejs_app'){
          if(difference){ 
-         
+                steps {
+                    script{
+                        
+                        try {
                             withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
                             docker.build('devopsabi/demo_app:'+currentBuild.number).push()
                             
                              }
-
+                        
+                        }catch (Exception e){
+                        testPassed = false
+                        }
                     }
-            }
-
+                }
+            }   
+         }
         
+	    stage('Deploy new version') {
+        if(testPassed){
+            	steps {
+                	retry(3) {
+                  	  sh 'docker service update --image devopsabi/demo_app:18 demo_app'
+               		 }
+
+                	timeout(time: 3, unit: 'MINUTES') {
+                    		sh './health-check.sh'
+               		 }
+            	}
+	    }
+    }
         
     }
 }
