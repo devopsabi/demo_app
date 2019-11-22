@@ -5,7 +5,7 @@ const port = 3000
 var os = require("os");
 var hostname = os.hostname();
 
-app.get('/', (req, res) => res.send('Hello World! <h1 style="color:blue;">Demo App Version 03<h1> <br>'))
+app.get('/', (req, res) => res.send('Hello World! <h1 style="color:red;">Demo App Version 04<h1> <br>'))
 app.get('/api',(req,res)=>{
     res.json({title:"api",message:"root", host:hostname});
 })
