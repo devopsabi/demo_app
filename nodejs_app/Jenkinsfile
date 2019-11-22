@@ -1,63 +1,17 @@
 pipeline {
-        agent any
-
-        stages {
-
-            stage('checkout_nodejs_app') {
-                steps {
-                    git branch:"master", url: '', credentialsId:'git_hub_id'
-                }
-
-            }
-            boolean difference = true
-            stage('Verify if there is a change in the version'){
-                steps{
-                    script{
-                        try {
-                            sh 'diff new_version.txt current_version.txt'
-                        }catch (Exception e){
-                            difference = false
-                        }
-                    }
-                }
-            
-            }
-            
-            
-
-         boolean testPassed = true
-         stage('build docker image nodejs_app'){
-         if(difference){ 
-                steps {
-                    script{
-                        
-                        try {
-                            withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
-                            docker.build('devopsabi/demo_app:'+currentBuild.number).push()
-                            
-                             }
-                        
-                        }catch (Exception e){
-                        testPassed = false
-                        }
-                    }
-                }
-            }   
-         }
-        
-	    stage('Deploy new version') {
-        if(testPassed){
-            	steps {
-                	retry(3) {
-                  	  sh 'docker service update --image devopsabi/demo_app:18 demo_app'
-               		 }
-
-                	timeout(time: 3, unit: 'MINUTES') {
-                    		sh './health-check.sh'
-               		 }
-            	}
-	    }
-    }
-        
-    }
+	agent any
+	stages {
+		stage ('build') {			
+	input{
+		message "Press Ok to continue"
+		submitter "user1,user2"
+		parameters {
+			string(name:'username', defaultValue: 'user', description: 'Username of the user pressing Ok')
+		}
+	}
+	steps { 
+		echo "User: ${username} said Ok."
+	}
+		}
+	}
 }
