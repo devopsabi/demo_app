@@ -9,6 +9,23 @@ pipeline {
                 }
     
             }
+
+		
+         stage('build docker image nodejs_app'){
+                steps {
+                    script{
+			
+                        withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
+                            docker.build('devopsabi/demo_app:'+currentBuild.number).push()
+                            exit_status = sh(script: echo $?)
+                            println "${exit_status}"
+
+                           }
+                    }
+                }
+            }
+            
+
 	    stage('Test Run') {
             	steps {
                 	retry(3) {
@@ -20,17 +37,6 @@ pipeline {
                		 }
             	}
 	    }
-		
-         stage('build docker image nodejs_app'){
-                steps {
-                    script{
-			
-                        withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
-                            docker.build('devopsabi/demo_app:'+currentBuild.number).push()
-			    println "${env}"
-                           }
-                    }
-                }
-            }
+
     }
 }
