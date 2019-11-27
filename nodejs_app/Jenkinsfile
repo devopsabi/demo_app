@@ -37,16 +37,16 @@ def success_call(docker_img) {
 			
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
                             //docker.build('devopsabi/demo_app:'+currentBuild.number).push()
-                            status = sh(script: 'diff current_version.txt new_version.txt && echo $?', returnStdout: true)
+                            status = sh(script: 'cat deploy.txt', returnStdout: true)
                             current_version = sh(script: 'cat current_version.txt', returnStdout: true)
-                            new_version = sh(script: 'cat deploy.txt', returnStdout: true)
+                            new_version = sh(script: 'cat new_version.txt', returnStdout: true)
                             println "${exit_status}"
                             if ( status == 'no' ){
                                     println "Same versions... NOT DEPLOYING THE CHANGES"
                                     success_call('img_abhi').call()
                                 }
                                 
-                            if ( exit_status == 'yes' ){
+                            if ( status == 'yes' ){
                                     println "current Version = ${current_version}\nNew version = ${new_version}"
                                     build_docker_image('devopsabi/demo_app:'+current_version).call()
                                 }
