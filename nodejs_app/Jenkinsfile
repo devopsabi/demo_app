@@ -17,7 +17,7 @@ pipeline {
 			
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
                             docker.build('devopsabi/demo_app:'+currentBuild.number).push()
-                            exit_status = sh(script: echo $?)
+                            exit_status = sh(script: 'uptime')
                             println "${exit_status}"
 
                            }
