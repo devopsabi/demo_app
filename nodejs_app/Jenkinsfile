@@ -2,7 +2,7 @@ def build_docker_image(img_name) {
     return {
         stage("Building image"){
             echo "Build Docker Image ${img_name}"
-            docker.build${img_name}.push()
+            sh(script: 'docker build -t ${img_name} .')
         }
     }
 }
