@@ -37,7 +37,7 @@ def success_call(docker_img) {
 			
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
                             //docker.build('devopsabi/demo_app:'+currentBuild.number).push()
-                            status = sh(script: 'cat deploy.txt', returnStdout: true)
+                            status = sh(script: 'cat deploy.txt', returnStdout: true).trim()
                             current_version = sh(script: 'cat current_version.txt', returnStdout: true)
                             new_version = sh(script: 'cat new_version.txt', returnStdout: true)
                             println "${status}"
