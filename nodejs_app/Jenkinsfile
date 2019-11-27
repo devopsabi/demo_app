@@ -20,7 +20,7 @@ def build_docker_image() {
 def update_app() {
     return {
         stage("Updating app to ${current_version}")
-        deploy_app = sh(script: 'docker service update --image devopsabi/demo_app:${current_version} demo_app', returnStdout: true)
+        deploy_app = sh(script: 'docker service update --image devopsabi/demo_app:'+current_version+' demo_app', returnStdout: true)
         
     }
 }
@@ -57,7 +57,7 @@ def success_call(docker_img) {
                             new_version = sh(script: 'cat new_version.txt', returnStdout: true)
                             println "${status}"
                             if ( status == 'no' ){
-                                    println "NOT DEPLOYING THE CHANGES... Please update deploy.txt and set as 'yes' If you would like to deploy the current version "
+                                    println "NOT DEPLOYING THE CHANGES... Please update deploy.txt and set as "yes" If you would like to deploy the current version "
                                     success_call('img_abhi').call()
                                 }
                                 
@@ -88,3 +88,4 @@ def success_call(docker_img) {
 
     }
 }
+
