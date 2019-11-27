@@ -1,9 +1,8 @@
- def success_call(img_name) {
+def build_image(img_name) {
     return {
-        stage("Building image") {
-            echo "Building image ${img_name}"
-            docker.build(${img_name}.push()
-            }
+        stage("Building image"){
+            echo "Build Docker Image ${docker_img}"
+            docker.build(${img_name}.push())
         }
     }
 }
@@ -73,3 +72,4 @@ def build_image(docker_img) {
 
     }
 }
+
