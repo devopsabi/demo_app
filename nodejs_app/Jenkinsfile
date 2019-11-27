@@ -1,10 +1,10 @@
-def build_docker_image(img_name) {
+def build_docker_image() {
     return {
         stage("Building image"){
             echo "Build Docker Image ${img_name}"
             script{
                 withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
-                    docker.build(''+img_name+'').push()
+                    docker.build('devopsabi/demo_app:'+current_version).push()
                 }
             }
             
@@ -50,7 +50,7 @@ def success_call(docker_img) {
                                 
                             if ( status == 'yes' ){
                                     println "current Version = ${current_version}\nNew version = ${new_version}"
-                                    build_docker_image('devopsabi/demo_app:'+current_version).call()
+                                    build_docker_image().call()
                                 }
                     
                     }
@@ -74,4 +74,3 @@ def success_call(docker_img) {
 
     }
 }
-
