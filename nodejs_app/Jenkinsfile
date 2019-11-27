@@ -19,9 +19,8 @@ def build_docker_image() {
 
 def update_app() {
     return {
-        stage("Updating app to ${current_version}")
-        deploy_app = sh(script: 'docker service update --image devopsabi/demo_app:'+current_version+' demo_app', returnStdout: true)
-        
+        stage("Updating app to ${new_version}")
+        sh 'docker service update --image devopsabi/demo_app: ${new_version} demo_app'     
     }
 }
 
