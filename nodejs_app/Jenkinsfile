@@ -31,7 +31,7 @@ def success_call(img_name) {
                             println "${exit_status}"
                             if ( exit_status != '0' ){
                                     println "Same versions"
-                                    success_call(img_name).call()
+                                    success_call('img_name_abhi').call()
                                 }
 
                            }
