@@ -2,7 +2,12 @@ def build_docker_image(img_name) {
     return {
         stage("Building image"){
             echo "Build Docker Image ${img_name}"
-            sh(script: 'docker build -t ${img_name} .')
+            script{
+                withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
+                    docker.build(img_name).push()
+                }
+            }
+            
         }
     }
 }
