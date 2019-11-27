@@ -3,6 +3,7 @@
         stage("Building image") {
             echo "Building image ${img_name}"
             docker.build(${img_name}.push()
+            }
         }
     }
 }
