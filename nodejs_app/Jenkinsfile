@@ -38,8 +38,8 @@ def build_image(docker_img) {
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
                             //docker.build('devopsabi/demo_app:'+currentBuild.number).push()
                             exit_status = sh(script: 'diff current_version.txt new_version.txt')
-                            current_version = sh(script: 'cat current_version.txt')
-                            new_version = sh(script: 'cat new_version.txt')
+                            current_version = sh(script: 'cat current_version.txt', returnStdout: true)
+                            new_version = sh(script: 'cat new_version.txt', returnStdout: true)
                             println "${exit_status}"
                             if ( exit_status == '0' ){
                                     println "Same versions... NOT DEPLOYING THE CHANGES"
@@ -47,7 +47,7 @@ def build_image(docker_img) {
                                 }
                                 
                             if ( exit_status != '0' ){
-                                    println "${current_version}"
+                                    println "${current_version}\n${new_version}"
                                     //build_image('devopsabi/demo_app:'+current_version).call()
                                 }
                            }
