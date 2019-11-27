@@ -1,4 +1,4 @@
-pipeline {
+ pipeline {
         agent any
         
         stages {
@@ -16,14 +16,19 @@ pipeline {
                     script{
 			
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
-                            docker.build('devopsabi/demo_app:'+currentBuild.number).push()
-                            exit_status = sh(script: 'uptime')
+                            //docker.build('devopsabi/demo_app:'+currentBuild.number).push()
+                            exit_status = sh(script: 'diff current_version.txt new_version.txt')
                             println "${exit_status}"
+                            if ( exit_status != '0' ){
+                                    println "Same versions"
+                                }
 
                            }
                     }
                 }
             }
+            
+        
             
 
 	    stage('Test Run') {
