@@ -7,7 +7,7 @@ def build_docker_image(img_name) {
     }
 }
 
-def build_image(docker_img) {
+def success_call(docker_img) {
     return {
         stage("Building Docker Image"){
             echo "Build Docker Image ${docker_img}"
@@ -46,7 +46,7 @@ def build_image(docker_img) {
                                     success_call('img_abhi').call()
                                 }
                                 
-                            if ( exit_status != '0' ){
+                            if ( exit_status != 0 ){
                                     println "current Version = ${current_version}\nNew version = ${new_version}"
                                     build_image('devopsabi/demo_app:'+current_version).call()
                                 }
