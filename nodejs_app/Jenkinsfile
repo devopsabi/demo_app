@@ -72,4 +72,77 @@ def success_call(docker_img) {
 
     }
 }
+def build_docker_image(img_name) {
+    return {
+        stage("Building image"){
+            echo "Build Docker Image ${docker_img}"
+            docker.build(${img_name}.push())
+        }
+    }
+}
 
+def success_call(docker_img) {
+    return {
+        stage("Building Docker Image"){
+            echo "Build Docker Image ${docker_img}"
+            
+        }
+    }
+}
+
+
+ 
+ pipeline {
+        agent any
+        
+        stages {
+        
+            stage('checkout_nodejs_app') {
+                steps {
+                    git branch:"master", url: '', credentialsId:'git_hub_id'
+                }
+    
+            }
+
+		
+         stage('build docker image nodejs_app'){
+                steps {
+                    script{
+			
+                        withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
+                            //docker.build('devopsabi/demo_app:'+currentBuild.number).push()
+                            exit_status = sh(script: 'diff current_version.txt new_version.txt && echo $?', returnStdout: true)
+                            current_version = sh(script: 'cat current_version.txt', returnStdout: true)
+                            new_version = sh(script: 'cat new_version.txt', returnStdout: true)
+                            println "${exit_status}"
+                            if ( exit_status == '0' ){
+                                    println "Same versions... NOT DEPLOYING THE CHANGES"
+                                    success_call('img_abhi').call()
+                                }
+                                
+                            if ( exit_status != 0 ){
+                                    println "current Version = ${current_version}\nNew version = ${new_version}"
+                                    build_docker_image('devopsabi/demo_app:'+current_version).call()
+                                }
+                           }
+                    }
+                }
+            }
+            
+        
+            
+
+	    stage('Test Run') {
+            	steps {
+                	retry(3) {
+                  	  sh './run.sh'
+               		 }
+
+                	timeout(time: 3, unit: 'MINUTES') {
+                    		sh './health-check.sh'
+               		 }
+            	}
+	    }
+
+    }
+}
