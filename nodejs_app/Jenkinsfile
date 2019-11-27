@@ -1,3 +1,13 @@
+def success_call(img_name) {
+    return {
+        stage("Building image") {
+            echo "Building image ${img_name}"
+        }
+    }
+}
+
+
+ 
  pipeline {
         agent any
         
@@ -21,6 +31,7 @@
                             println "${exit_status}"
                             if ( exit_status != '0' ){
                                     println "Same versions"
+                                    success_call(img_name).call()
                                 }
 
                            }
