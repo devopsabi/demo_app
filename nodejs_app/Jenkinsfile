@@ -1,7 +1,17 @@
-def success_call(img_name) {
+ def success_call(img_name) {
     return {
         stage("Building image") {
             echo "Building image ${img_name}"
+            docker.build(${img_name}.push()
+        }
+    }
+}
+
+def build_image(docker_img) {
+    return {
+        stage("Building Docker Image"){
+            echo "Build Docker Image ${docker_img}"
+            
         }
     }
 }
@@ -28,12 +38,18 @@ def success_call(img_name) {
                         withDockerRegistry(url:'',credentialsId:'docker_hub_id'){
                             //docker.build('devopsabi/demo_app:'+currentBuild.number).push()
                             exit_status = sh(script: 'diff current_version.txt new_version.txt')
+                            current_version = sh(script: 'cat current_version.txt')
+                            new_version = sh(script: 'cat new_version.txt')
                             println "${exit_status}"
                             if ( exit_status != '0' ){
-                                    println "Same versions"
-                                    success_call('img_name_abhi').call()
+                                    println "Same versions... NOT DEPLOYING THE CHANGES"
+                                    success_call('img_abhi').call()
                                 }
-
+                                
+                            if ( exit_status == '0' ){
+                                    println "Current version is ${current_version}....\n Deploying new version ${new_version}"
+                                    build_image('devopsabi/demo_app:'+current_version).call()
+                                }
                            }
                     }
                 }
