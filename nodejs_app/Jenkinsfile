@@ -47,7 +47,7 @@ def build_image(docker_img) {
                                 }
                                 
                             if ( exit_status != '0' ){
-                                    println "Current version is +current_version'+....\nDeploying new version'+new_version"
+                                    println "${current_version}"
                                     //build_image('devopsabi/demo_app:'+current_version).call()
                                 }
                            }
