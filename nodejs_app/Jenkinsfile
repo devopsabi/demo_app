@@ -41,12 +41,12 @@ def build_image(docker_img) {
                             current_version = sh(script: 'cat current_version.txt')
                             new_version = sh(script: 'cat new_version.txt')
                             println "${exit_status}"
-                            if ( exit_status != '0' ){
+                            if ( exit_status == '0' ){
                                     println "Same versions... NOT DEPLOYING THE CHANGES"
                                     success_call('img_abhi').call()
                                 }
                                 
-                            if ( exit_status == '0' ){
+                            if ( exit_status != '0' ){
                                     println "Current version is ${current_version}....\n Deploying new version ${new_version}"
                                     build_image('devopsabi/demo_app:'+current_version).call()
                                 }
