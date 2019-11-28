@@ -27,15 +27,6 @@ def update_app() {
     }
 }
 
-def success_call(docker_img) {
-    return {
-        stage("Building Docker Image"){
-            echo "Build Docker Image ${docker_img}"
-            
-        }
-    }
-}
-
 
  
  pipeline {
@@ -60,7 +51,6 @@ def success_call(docker_img) {
                             println "${status}"
                             if ( status == 'no' ){
                                     println "NOT DEPLOYING THE CHANGES... Please update deploy.txt and set as "yes" If you would like to deploy the current version "
-                                    success_call('img_abhi').call()
                                 }
                                 
                             if ( status == 'yes' ){
@@ -73,20 +63,6 @@ def success_call(docker_img) {
                 }
             }
             
-        
-            
-
-	    stage('Test Run') {
-            	steps {
-                	retry(3) {
-                  	  sh './run.sh'
-               		 }
-
-                	timeout(time: 3, unit: 'MINUTES') {
-                    		sh './health-check.sh'
-               		 }
-            	}
-	    }
 
     }
 }
