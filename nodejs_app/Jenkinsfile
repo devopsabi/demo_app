@@ -56,7 +56,7 @@ def update_app() {
                                 }
                                 
                             else {
-                                    println "NOT DEPLOYING THE CHANGES... Please update deploy.txt and set as "yes" If you would like to deploy the current version "
+                                    println "NOT DEPLOYING THE CHANGES... Please update deploy.txt and set as 'yes' If you would like to deploy the current version "
 
                                 }
                     
