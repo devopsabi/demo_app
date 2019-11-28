@@ -1,7 +1,7 @@
 def build_docker_image() {
     return {
         stage("Building image"){
-            echo "Build Docker Image devopsabi/demo_app:${current_version} "
+            echo "Build Docker Image devopsabi/demo_app:${new_version} "
             echo "${env}"
             
             script{
@@ -22,7 +22,7 @@ def update_app() {
         stage("Updating app to ${new_version}")
         new_version = sh(script: 'cat new_version.txt', returnStdout: true)
         deploy_app = 'docker service update --image devopsabi/demo_app:\'+new_version +\' demo_app'
-        sh '${deploy_app}'     
+        echo ${deploy_app}
     }
 }
 
@@ -89,4 +89,3 @@ def success_call(docker_img) {
 
     }
 }
-
