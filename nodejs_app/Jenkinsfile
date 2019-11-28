@@ -49,14 +49,15 @@ def update_app() {
                             current_version = sh(script: 'cat current_version.txt', returnStdout: true)
                             new_version = sh(script: 'cat new_version.txt', returnStdout: true)
                             println "${status}"
-                            if ( status == 'no' ){
-                                    println "NOT DEPLOYING THE CHANGES... Please update deploy.txt and set as "yes" If you would like to deploy the current version "
-                                }
-                                
                             if ( status == 'yes' ){
                                     println "current Version = ${current_version}\nNew version = ${new_version}"
                                     build_docker_image().call()
                                     update_app().call()
+                                }
+                                
+                            else {
+                                    println "NOT DEPLOYING THE CHANGES... Please update deploy.txt and set as "yes" If you would like to deploy the current version "
+
                                 }
                     
                     }
